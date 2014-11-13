@@ -5,7 +5,14 @@ class php::params {
       $php_apc_package_name = 'php-apc'
       $common_package_name = 'php5-common'
       $cli_package_name = 'php5-cli'
-      $php_conf_dir = '/etc/php5/conf.d'
+      case $::lsbdistrelease {
+        '14.04': {
+          $php_conf_dir = '/etc/php5/mods-available'
+        }
+        default: {
+          $php_conf_dir = '/etc/php5/conf.d'
+        }
+      }
       $fpm_package_name = 'php5-fpm'
       $fpm_service_name = 'php5-fpm'
       $fpm_pool_dir = '/etc/php5/fpm/pool.d'

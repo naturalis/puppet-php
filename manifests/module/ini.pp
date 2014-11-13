@@ -43,18 +43,40 @@ define php::module::ini (
   # INI configuration file
   if $prefix {
     $inifile = "${::php::params::php_conf_dir}/${prefix}-${modname}.ini"
+    $cleanmodname = "${prefix}-${modname}.ini"
   } else {
     $inifile = "${::php::params::php_conf_dir}/${modname}.ini"
+    $cleanmodname = "${modname}.ini"
   }
   if $ensure == 'absent' {
     file { $inifile:
       ensure => absent,
+    }
+    if ($::osfamily == 'Debian' and $::lsbdistrelease == '14.04') {
+      file { "/etc/php5/apache2/conf.d/${cleanmodname}":
+        ensure => absent,
+      }
+      file { "/etc/php5/cli/conf.d/${cleanmodname}":
+        ensure => absent,
+      }
     }
   } else {
     file { $inifile:
       ensure  => $ensure,
       require => Package[$ospkgname],
       content => template('php/module.ini.erb'),
+    }
+    if ($::osfamily == 'Debian' and $::lsbdistrelease == '14.04') {
+      file { "/etc/php5/apache2/conf.d/${cleanmodname}":
+        ensure  => 'link',
+        target  => $inifile,
+        require => File[$inifile]
+      }
+      file { "/etc/php5/cli/conf.d/${cleanmodname}":
+        ensure => 'link',
+        target => $inifile,
+        require => File[$inifile]
+      }
     }
   }
 
