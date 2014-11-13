@@ -28,7 +28,7 @@ define php::module::ini (
   $modname = regsubst($title , '^pecl-', '', 'G')
 
   # Handle naming issue of php-apc package on Debian
-  if ($modname == 'apc' and $pkgname == false) {
+  if (($modname == 'apc' or $modname == 'apcu') and $pkgname == false) {
     # Package name
     $ospkgname = $::php::params::php_apc_package_name
   } else {
