@@ -83,7 +83,7 @@ define php::ini (
   $sql_safe_mode              = 'Off',
   $browscap                   = undef,
   $session_save_handler       = 'files',
-  $session_save_path          = '/var/lib/php/session',
+  $session_save_path          = '',
   $session_use_cookies        = '1',
   $session_use_only_cookies   = '1',
   $session_name               = 'PHPSESSID',
